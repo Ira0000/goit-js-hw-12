@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Photo search</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital@0;1&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;1,500&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body>
+    <form class="search-form">
+      <label
+        ><input
+          type="text"
+          name="search"
+          class="search-input"
+          placeholder="Search images..."
+      /></label>
+      <button type="submit" class="search-btn">Search</button>
+    </form>
+    <section class="img-section">
+      <ul class="img-list"></ul>
+    </section>
+    <script type="module" src="./main.js"></script>
+    <script
+      src="https://kit.fontawesome.com/68eacf76b9.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
