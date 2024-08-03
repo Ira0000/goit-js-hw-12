@@ -6,12 +6,8 @@ import 'izitoast/dist/css/iziToast.min.css';
 const searchForm = document.querySelector('.search-form');
 const searchField = document.querySelector('.search-input');
 const imgList = document.querySelector('.img-list');
-// const photoesContainer = document.querySelector('.img-section');
 const loadMoreBtn = document.querySelector('.load-more-btn');
-
-// const downloadStatus = '<div class="loader"></div>';
-// photoesContainer.insertAdjacentHTML('afterbegin', downloadStatus);
-//   const loader = document.querySelector('.loader');
+const loaderDiv = document.querySelector('.loader');
 
 function showErrorToastMessage(message) {
   iziToast.error({
@@ -30,6 +26,7 @@ function showErrorToastMessage(message) {
 let pageShown = 1;
 const perPage = 15;
 let maxPage;
+let searchValue;
 
 class ButtonService {
   constructor(buttonEL, hiddenClass) {
@@ -55,40 +52,47 @@ class ButtonService {
 }
 
 const loadButton = new ButtonService(loadMoreBtn, "is-hidden")
+const loader = new ButtonService(loaderDiv, "is-hidden");
 loadButton.hide();
+loader.hide();
+
+
 
 searchForm.addEventListener('submit', handleSearch);
+
 async function handleSearch(event) {
   event.preventDefault();
-
+  loadButton.hide();
   imgList.innerHTML = '';
-
-  const searchValue = searchField.value.trim();
-
+  searchValue = searchField.value.trim();
+  loader.show();
 
   if (searchValue === '') {
+    loadButton.hide();
+    loader.hide();
     showErrorToastMessage('Please fill the search field!');
     return;
   } else {
     pageShown = 1;
  
-
-
     try {
       const response = await fetchImages(searchValue, pageShown, perPage);
+      console.log(response)
       const photos = response.data.hits;
-      const totalImages = response.data.total;
+      const totalImages = response.data.totalHits;
 
         maxPage = Math.ceil(totalImages / perPage);
         console.log(maxPage);
 
         if (totalImages > 0) {
           loadButton.show();
-    loadButton.disable();
+          loadButton.disable();
           renderPhotoes(photos, imgList);
+          loader.hide();
         } else {
+        loader.hide();
         showErrorToastMessage('Sorry, there are no images matching your search query. Please try again!');
-        }
+        loadButton.hide();}
         if (maxPage > 1) {
           loadButton.enable();
           loadMoreBtn.addEventListener('click', handleLoadMore);
@@ -107,19 +111,23 @@ async function handleSearch(event) {
 
 async function handleLoadMore() {
   loadButton.disable();
-  pageShown++;
+  pageShown = pageShown + 1;
+  loader.show();
 
   try {
-    const response = await fetchImages(searchField.value.trim(), pageShown, perPage);
+    const response = await fetchImages(searchValue, pageShown, perPage);
     const photos = response.data.hits;
     renderPhotoes(photos, imgList);
+    loader.hide();
   } catch (err) {
     console.error(`Error during request: ${err.message}`);
   }
   finally{
     if (pageShown === maxPage) {
+      // loader.remove();
       loadButton.hide();
       loadMoreBtn.removeEventListener('click', handleLoadMore);
+
     } else {
       loadButton.enable();
     }

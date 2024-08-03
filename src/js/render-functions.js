@@ -31,9 +31,8 @@ function renderPhotoes(photos, imgList) {
     })
     .join('');
   //   console.log(markup);
-
+ 
   imgList.insertAdjacentHTML('beforeend', markup);
-
   gallery.on('show.simplelightbox', function () {});
   gallery.refresh();
 }
