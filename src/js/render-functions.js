@@ -11,7 +11,7 @@ let gallery = new SimpleLightbox('.img-list a', {
 });
 
 function renderPhotoes(photos, imgList) {
-  const markup = photos.hits
+  const markup = photos
     .map(photo => {
       return `<li class="gallery-item">
             <a class="gallery-link" href="${photo.largeImageURL}">
@@ -30,8 +30,9 @@ function renderPhotoes(photos, imgList) {
               </li>`;
     })
     .join('');
+  //   console.log(markup);
 
-  imgList.insertAdjacentHTML('afterbegin', markup);
+  imgList.insertAdjacentHTML('beforeend', markup);
 
   gallery.on('show.simplelightbox', function () {});
   gallery.refresh();
