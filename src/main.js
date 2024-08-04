@@ -77,12 +77,12 @@ async function handleSearch(event) {
  
     try {
       const response = await fetchImages(searchValue, pageShown, perPage);
-      console.log(response)
+      // console.log(response)
       const photos = response.data.hits;
       const totalImages = response.data.totalHits;
 
         maxPage = Math.ceil(totalImages / perPage);
-        console.log(maxPage);
+        // console.log(maxPage);
 
         if (totalImages > 0) {
           loadButton.show();
@@ -118,18 +118,35 @@ async function handleLoadMore() {
     const response = await fetchImages(searchValue, pageShown, perPage);
     const photos = response.data.hits;
     renderPhotoes(photos, imgList);
+    let imgContainer = document.querySelector('.gallery-item');
+    let imgContainerProperties = imgContainer.getBoundingClientRect()
+      window.scrollBy({
+        top: (2 * imgContainerProperties.height),
+        behavior: "smooth",
+      })
     loader.hide();
   } catch (err) {
     console.error(`Error during request: ${err.message}`);
   }
   finally{
     if (pageShown === maxPage) {
-      // loader.remove();
       loadButton.hide();
       loadMoreBtn.removeEventListener('click', handleLoadMore);
+      iziToast.info({
+        message: "We're sorry, but you've reached the end of search results.",
+        position: 'topRight',
+        backgroundColor: '#8AC7DB',
+        messageColor: '#000',
+        iconColor: '#000',
+        icon: 'fa-solid fa-circle-info',
+        progressBarColor: '#B51B1B',
+        maxWidth: 432,
+        messageSize: '16',
+      });
 
     } else {
       loadButton.enable();
     }
   }
 }
+
