@@ -103,7 +103,7 @@ async function handleSearch(event) {
       catch (err) {
       console.log(`Помилка під час запиту: ${err.message}`);
     } finally {
-      event.currentTarget.reset();
+      event.target.reset();
     }
   }
 }
