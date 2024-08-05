@@ -77,13 +77,11 @@ async function handleSearch(event) {
  
     try {
       const response = await fetchImages(searchValue, pageShown, perPage);
-      // console.log(response)
+
       const photos = response.data.hits;
       const totalImages = response.data.totalHits;
 
         maxPage = Math.ceil(totalImages / perPage);
-        // console.log(maxPage);
-
         if (totalImages > 0) {
           loadButton.show();
           loadButton.disable();
@@ -101,7 +99,7 @@ async function handleSearch(event) {
         }
       } 
       catch (err) {
-      console.log(`Помилка під час запиту: ${err.message}`);
+        showErrorToastMessage(`Помилка під час запиту: ${err.message}`)
     } finally {
       event.target.reset();
     }
@@ -126,7 +124,7 @@ async function handleLoadMore() {
       })
     loader.hide();
   } catch (err) {
-    console.error(`Error during request: ${err.message}`);
+    showErrorToastMessage(`Error during request: ${err.message}`)
   }
   finally{
     if (pageShown === maxPage) {
